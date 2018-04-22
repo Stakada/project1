@@ -3,5 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="edit_message">Name</string>
     <string name="button"> SEND</string>
+    <string name="button2">SEARCH</string>
+    <string name="button3">RATE</string>
+    <string name="button4">POLICY</string>
+    <string name="button5">QFA</string>
+
 
 </resources>
