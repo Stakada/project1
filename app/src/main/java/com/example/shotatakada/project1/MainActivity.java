@@ -42,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ButtonAdapter(this));
     }
@@ -57,9 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -69,12 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -101,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
             return 0;
         }
 
-        // create a new ImageView for each item referenced by the Adapter
         public View getView(int position, View convertView, ViewGroup parent) {
             Button button;
             if (convertView == null) {
@@ -132,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                     intent = new Intent(getBaseContext(), RecyclerWebActivity.class);
                     startActivity(intent);
                     break;
-                case 1:
+                /*case 1:
                     //intent = new Intent(getBaseContext(), RecyclerWebActivity.class);
                     //startActivity(intent);
                     break;
@@ -144,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
                     //intent = new Intent(getBaseContext(), MapActivity.class);
                     //startActivity(intent);
                     break;
-                default:
+
+                */default:
                     Button b = (Button) v;
                     String label = b.getText().toString();
                     Toast.makeText(MainActivity.this, label,

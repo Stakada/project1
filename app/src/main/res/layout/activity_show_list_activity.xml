@@ -4,8 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".show_list_activity">
+    >
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Zombie Movies"
+        android:layout_margin="10dp"
+        android:textSize="18dp"
+        android:textStyle="bold"
+
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/myrecyclerview"

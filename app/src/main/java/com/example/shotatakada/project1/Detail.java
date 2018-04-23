@@ -23,7 +23,7 @@ public class Detail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        //
+        //get String value from the selected item
         Intent intent = getIntent();
         String title = intent.getStringExtra(TITLE);
         String year = intent.getStringExtra(YEAR);
@@ -31,14 +31,14 @@ public class Detail extends AppCompatActivity {
         String image = intent.getStringExtra(IMAGE);
         String desc = intent.getStringExtra(DESC);
 
-        //
+
         TextView mTitle = findViewById(R.id.mTitle);
         TextView mYear = findViewById(R.id.mYear);
         TextView mDirector = findViewById(R.id.mDirector);
         ImageView mImage = findViewById(R.id.mImage);
         TextView mDesc = findViewById(R.id.mDesc);
 
-
+        //set the values to each item in the model
         Picasso.with(this).load(image).fit().into(mImage);
         mTitle.setText(title);
         mYear.setText("In " + year);

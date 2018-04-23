@@ -14,7 +14,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private ArrayList<MovieItems> arr;
     private OnItemClickListener mListener;
 
-
     public interface OnItemClickListener{
         void onItemClick(int position);
     }
@@ -26,18 +25,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public Adapter(Context context, ArrayList<MovieItems> arr){
         this.context = context;
         this.arr = arr;
-
-
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // Inflate the view for this view holder
         View item = LayoutInflater.from(context).inflate(R.layout.items, parent,
                 false);
-
-        // Call the view holder's constructor, and pass the view to it;
-        // return that new view holder
         ViewHolder vh = new ViewHolder(item);
         return vh;
     }
@@ -45,12 +38,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         MovieItems currItem = arr.get(position);
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
         holder.mTitle.setText(currItem.getTitle());
         holder.mYear.setText(currItem.getYear());
-
-
     }
 
     @Override

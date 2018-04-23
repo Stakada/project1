@@ -31,13 +31,11 @@ public class RecyclerWebActivity extends AppCompatActivity implements Adapter.On
 
     Context context;
     RecyclerView recyclerView;
-    //RecyclerView.Adapter recyclerViewAdapter;
     RecyclerView.LayoutManager recyclerViewLayoutManager;
     String url = "http://stakada.icoolshow.net/zombie_movies.json";
     Adapter adapter;
     RequestQueue queue;
 
-    // 2D resizable array filled with movie titles and years
     ArrayList<MovieItems> movies = new ArrayList<MovieItems>();
 
     @Override
@@ -51,7 +49,6 @@ public class RecyclerWebActivity extends AppCompatActivity implements Adapter.On
         recyclerView = findViewById(R.id.myrecyclerview);
         recyclerViewLayoutManager = new LinearLayoutManager(context);
 
-        // use a linear layout manager
         recyclerViewLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -66,7 +63,6 @@ public class RecyclerWebActivity extends AppCompatActivity implements Adapter.On
                     public void onResponse(JSONArray response) {
                         try {
                             for (int i = 0; i < response.length(); i++) {
-                                //String[] item = new String[5];
                                 String title = response.getJSONObject(i).getString("title");
                                 String year = response.getJSONObject(i).getString("year");
                                 String director = response.getJSONObject(i).getString("director");
