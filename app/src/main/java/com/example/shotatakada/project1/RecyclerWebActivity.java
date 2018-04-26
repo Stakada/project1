@@ -3,10 +3,13 @@ package com.example.shotatakada.project1;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -42,6 +45,10 @@ public class RecyclerWebActivity extends AppCompatActivity implements Adapter.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_list_activity);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+
+        //create the Up navigation
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         context = getApplicationContext();
@@ -51,6 +58,8 @@ public class RecyclerWebActivity extends AppCompatActivity implements Adapter.On
 
         recyclerViewLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
 
         queue = Volley.newRequestQueue(this);
         parseJSON();
@@ -79,12 +88,12 @@ public class RecyclerWebActivity extends AppCompatActivity implements Adapter.On
                         }
                     }
 
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                        }
-                    });
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
         queue.add(request);
 
     }
@@ -108,6 +117,17 @@ public class RecyclerWebActivity extends AppCompatActivity implements Adapter.On
         detailIntent.putExtra(DESC, clickedItem.getDesc());
 
         startActivity(detailIntent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

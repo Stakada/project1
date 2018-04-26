@@ -1,4 +1,4 @@
-/*package com.example.shotatakada.project1;
+package com.example.shotatakada.project1;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -90,4 +90,3 @@ public class show_list_activity extends AppCompatActivity {
         }
     }
 }
-*/

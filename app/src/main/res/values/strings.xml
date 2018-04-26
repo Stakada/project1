@@ -7,6 +7,14 @@
     <string name="button3">RATE</string>
     <string name="button4">POLICY</string>
     <string name="button5">QFA</string>
+    <string name="title_detail">DETAILS</string>
+    <string name="title_movie">ZOMBIE MOVIES</string>
+    <string name="title_about">ABOUT</string>
+    <string name="about">This app has some functions. First, shows movie list with RecyclerView. Second, those elements are clickable and when the user click it,
+                        the app jumps to detail page.</string>
+    <string name="movie">MOVIE</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 
 
 </resources>

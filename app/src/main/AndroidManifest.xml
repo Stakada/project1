@@ -24,9 +24,30 @@
             </intent-filter>
         </activity>
         <activity android:name=".DisplayMessageActivity" />
-        <activity android:name=".show_list_activity" />
-        <activity android:name=".RecyclerWebActivity" />
-        <activity android:name=".Detail"></activity>
+
+        <activity android:name=".show_list_activity"
+            android:parentActivityName=".MainActivity"
+            />
+
+        <activity android:name=".RecyclerWebActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
+
+
+        <activity android:name=".Detail"
+            android:parentActivityName=".RecyclerWebActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RecyclerWebActivity"/>
+
+        </activity>
+
+        <activity android:name=".About"
+            android:parentActivityName=".MainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,9 +25,10 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     private static final String TAG = MainActivity.class.getSimpleName();
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
-
-    String[] arr = {"Zombie", "unknown", "unknown", "unknown" };
+    String[] arr = {"Zombie", "About", "unknown", "unknown" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +37,38 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Sorry, I can't reach to your email", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+
+                        return true;
+                    }
+                });
+
+
+
+
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ButtonAdapter(this));
     }
+
+
 
     public void sendMessage(View view){
         Intent intent = new Intent(this, DisplayMessageActivity.class);
@@ -67,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            return true;
+        } else if(mToggle.onOptionsItemSelected(item)){
             return true;
         }
 
@@ -122,11 +148,11 @@ public class MainActivity extends AppCompatActivity {
                     intent = new Intent(getBaseContext(), RecyclerWebActivity.class);
                     startActivity(intent);
                     break;
-                /*case 1:
-                    //intent = new Intent(getBaseContext(), RecyclerWebActivity.class);
-                    //startActivity(intent);
+                case 1:
+                    intent = new Intent(getBaseContext(), About.class);
+                    startActivity(intent);
                     break;
-                case 2:
+                /*case 2:
                     //intent = new Intent(getBaseContext(), RecyclerWebActivity.class);
                     //startActivity(intent);
                     break;
