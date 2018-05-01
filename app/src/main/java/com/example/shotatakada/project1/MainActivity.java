@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -22,7 +23,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout mDrawerLayout;
@@ -44,25 +45,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
-                        menuItem.setChecked(true);
-                        // close drawer when item is tapped
-                        mDrawerLayout.closeDrawers();
-
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-
-                        return true;
-                    }
-                });
-
-
-
-
+        navigationView.setNavigationItemSelectedListener(this);
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ButtonAdapter(this));
@@ -97,6 +80,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Intent intent;
+
+        if(id == R.id.nav_movie){
+            intent = new Intent(getBaseContext(), RecyclerWebActivity.class);
+            startActivity(intent);
+
+        }else if(id == R.id.nav_about){
+            intent = new Intent(getBaseContext(), About.class);
+            startActivity(intent);
+
+        }else if(id == R.id.action_settings){
+            Toast.makeText(this,"This is settings", Toast.LENGTH_SHORT).show();
+        }
+        return true;
     }
 
     public class ButtonAdapter extends BaseAdapter {
