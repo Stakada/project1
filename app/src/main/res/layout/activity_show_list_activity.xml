@@ -14,8 +14,7 @@
         app:title="Zombie Movies"
         app:titleTextColor="#fff"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
 
     <TextView

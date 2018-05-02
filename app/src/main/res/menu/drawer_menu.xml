@@ -3,10 +3,10 @@
 
         <item
             android:id="@+id/nav_about"
-
+                android:icon="@mipmap/ic_android_black_24dp"
             android:title="@string/title_about" />
         <item
             android:id="@+id/nav_movie"
-
+            android:icon="@mipmap/ic_local_movies_black_24dp"
             android:title="@string/movie" />
 </menu>

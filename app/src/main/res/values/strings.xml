@@ -10,8 +10,11 @@
     <string name="title_detail">DETAILS</string>
     <string name="title_movie">ZOMBIE MOVIES</string>
     <string name="title_about">ABOUT</string>
-    <string name="about">This app has some functions. First, shows movie list with RecyclerView. Second, those elements are clickable and when the user click it,
-                        the app jumps to detail page.</string>
+    <string name="about">
+        If you are looking for an app finds a fantastic Zombie movie, you are in right place.
+        You can find a Zombie movie with out app!
+
+    </string>
     <string name="movie">MOVIE</string>
     <string name="open">Open</string>
     <string name="close">Close</string>

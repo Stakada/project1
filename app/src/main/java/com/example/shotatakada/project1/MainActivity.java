@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +24,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity{
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout mDrawerLayout;
@@ -45,7 +46,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem item) {
+                        int id = item.getItemId();
+
+                        switch(id){
+                            case R.id.nav_about:
+                                Intent intent1 = new Intent(getBaseContext(), About.class);
+                                startActivity(intent1);
+                                break;
+
+                            case R.id.nav_movie:
+                                Intent intent2 = new Intent(getBaseContext(), RecyclerWebActivity.class);
+                                startActivity(intent2);
+                                break;
+                        }
+                        mDrawerLayout.closeDrawers();
+
+                        return true;
+                    }
+                });
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ButtonAdapter(this));
@@ -82,24 +104,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        Intent intent;
-
-        if(id == R.id.nav_movie){
-            intent = new Intent(getBaseContext(), RecyclerWebActivity.class);
-            startActivity(intent);
-
-        }else if(id == R.id.nav_about){
-            intent = new Intent(getBaseContext(), About.class);
-            startActivity(intent);
-
-        }else if(id == R.id.action_settings){
-            Toast.makeText(this,"This is settings", Toast.LENGTH_SHORT).show();
-        }
-        return true;
-    }
 
     public class ButtonAdapter extends BaseAdapter {
         private Context mContext;
