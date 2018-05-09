@@ -1,8 +1,10 @@
 package com.example.shotatakada.project1;
 
+import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -24,11 +26,15 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private EditText username;
+
+    private SharedPreferences sharedPref;
+    private SharedPreferencesHelper sharedPreferencesHelper;
 
     String[] arr = {"Zombie", "About", "unknown", "unknown" };
 
@@ -36,8 +42,15 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        sharedPreferencesHelper = new SharedPreferencesHelper(sharedPref);
+
+        username = (EditText) findViewById(R.id.userName);
+        username.setText(sharedPreferencesHelper.getEntry());
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -74,15 +87,25 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
-    public void sendMessage(View view){
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-        EditText editText = (EditText) findViewById(R.id.editText);
+    public void sendMessage(View view) {
+        EditText editText = findViewById(R.id.userName);
         String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+        if (checkInput(message)) {
+            sharedPreferencesHelper.saveEntry(message);
+            Intent intent = new Intent(this, DisplayMessageActivity.class);
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
+        }
+    }
+
+    public boolean checkInput(String message) {
+        if(message.length() == 0){
+            return false;
+        }
+        return true;
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
