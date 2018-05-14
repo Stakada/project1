@@ -1,22 +1,25 @@
 package com.example.shotatakada.project1;
 
 import android.content.Context;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+public class AdapterTraffic extends RecyclerView.Adapter<AdapterTraffic.ViewHolder> {
     private Context context;
-    private ArrayList<MovieItems> arr;
+    private ArrayList<trafficItems> arr;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener{
-        void onCreate();
-
         void onItemClick(int position);
     }
 
@@ -24,25 +27,27 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         mListener = listener;
     }
 
-    public Adapter(Context context, ArrayList<MovieItems> arr){
+    public AdapterTraffic(Context context, ArrayList<trafficItems> arr){
         this.context = context;
         this.arr = arr;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View item = LayoutInflater.from(context).inflate(R.layout.items, parent,
+        View item = LayoutInflater.from(context).inflate(R.layout.trafficitems, parent,
                 false);
         ViewHolder vh = new ViewHolder(item);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        MovieItems currItem = arr.get(position);
-        holder.mTitle.setText(currItem.getTitle());
-        holder.mYear.setText(currItem.getYear());
+    public void onBindViewHolder(AdapterTraffic.ViewHolder holder, int position) {
+        trafficItems currItem = arr.get(position);
+        holder.mLabel.setText(currItem.getLabel());
+        //Picasso.with(context).load(currItem.getImage());
+        Glide.with(context).load(currItem.getImage()).into(holder.mImage);
     }
+
 
     @Override
     public int getItemCount() {
@@ -50,13 +55,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTitle;
-        public TextView mYear;
+        public TextView mLabel;
+        public ImageView mImage;
 
         public ViewHolder(View view) {
             super(view);
-            mTitle = (TextView) view.findViewById(R.id.title);
-            mYear = (TextView) view.findViewById(R.id.year);
+            mLabel = (TextView) view.findViewById(R.id.label);
+            mImage = (ImageView) view.findViewById(R.id.imageView);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

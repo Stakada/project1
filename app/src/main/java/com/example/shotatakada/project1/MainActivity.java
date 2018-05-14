@@ -3,8 +3,11 @@ package com.example.shotatakada.project1;
 import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private SharedPreferencesHelper sharedPreferencesHelper;
 
-    String[] arr = {"Zombie", "About", "unknown", "unknown" };
+    String[] arr = {"Zombie", "About", "Traffic", "unknown" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ButtonAdapter(this));
+
+
     }
 
 
@@ -126,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
 
     public class ButtonAdapter extends BaseAdapter {
@@ -181,11 +188,11 @@ public class MainActivity extends AppCompatActivity {
                     intent = new Intent(getBaseContext(), About.class);
                     startActivity(intent);
                     break;
-                /*case 2:
-                    //intent = new Intent(getBaseContext(), RecyclerWebActivity.class);
-                    //startActivity(intent);
+                case 2:
+                    intent = new Intent(getBaseContext(), RecyclerViewTrafficActivity.class);
+                    startActivity(intent);
                     break;
-                case 3:
+                /*case 3:
                     //intent = new Intent(getBaseContext(), MapActivity.class);
                     //startActivity(intent);
                     break;
