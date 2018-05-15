@@ -61,6 +61,7 @@ public class RecyclerViewTrafficActivity extends AppCompatActivity{
 
         recyclerViewLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
 
         queue = Volley.newRequestQueue(this);
         parseJSON();
@@ -90,8 +91,9 @@ public class RecyclerViewTrafficActivity extends AppCompatActivity{
                                         traffic.add(new trafficItems(label, img, type));
                                     }
                                     adapter = new AdapterTraffic(RecyclerViewTrafficActivity.this, traffic);
+
                                     recyclerView.setAdapter(adapter);
-                                    //adapter.setOnItemClickListener((AdapterTraffic.OnItemClickListener) RecyclerViewTrafficActivity.this);
+                                    adapter.notifyDataSetChanged();
                                 }
 
                             } catch (JSONException e) {
