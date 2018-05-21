@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private SharedPreferencesHelper sharedPreferencesHelper;
 
-    String[] arr = {"Zombie", "About", "Traffic", "unknown" };
+    String[] arr = {"Zombie", "About", "Traffic", "Map" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,12 +192,12 @@ public class MainActivity extends AppCompatActivity {
                     intent = new Intent(getBaseContext(), RecyclerViewTrafficActivity.class);
                     startActivity(intent);
                     break;
-                /*case 3:
-                    //intent = new Intent(getBaseContext(), MapActivity.class);
-                    //startActivity(intent);
+                case 3:
+                    intent = new Intent(getBaseContext(), MapActivity.class);
+                    startActivity(intent);
                     break;
 
-                */default:
+                default:
                     Button b = (Button) v;
                     String label = b.getText().toString();
                     Toast.makeText(MainActivity.this, label,

@@ -27,15 +27,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class RecyclerViewTrafficActivity extends AppCompatActivity{
-    public static final String LABEL = "title";
-    public static final String IMG = "image";
     
     Context context;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager recyclerViewLayoutManager;
     String url = "https://web6.seattle.gov/Travelers/api/Map/Data?zoomId=13&type=2";
     AdapterTraffic adapter;
-    RequestQueue queue;
 
     ArrayList<trafficItems> traffic = new ArrayList<trafficItems>();
 
@@ -61,14 +58,11 @@ public class RecyclerViewTrafficActivity extends AppCompatActivity{
 
         recyclerViewLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new AdapterTraffic(RecyclerViewTrafficActivity.this,traffic);
         recyclerView.setAdapter(adapter);
 
-        queue = Volley.newRequestQueue(this);
-        parseJSON();
-
-    }
-
-    private void parseJSON() {
+        RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -77,25 +71,28 @@ public class RecyclerViewTrafficActivity extends AppCompatActivity{
                             JSONArray features = response.getJSONArray("Features");
                             try {
                                 for (int i = 0; i < features.length(); i++) {
-                                    JSONObject objArr = features.getJSONObject(i);
-                                    JSONArray finalArr = objArr.getJSONArray("Cameras");
+                                    JSONObject obj = features.getJSONObject(i);
+
+                                    //Get coordinate
+                                    JSONArray coord = obj.getJSONArray("PointCoordinate");
+                                    Double lat = coord.optDouble(0);
+                                    Double lan = coord.optDouble(1);
+
+
+                                    //iterate through the Camera array
+                                    JSONArray finalArr = obj.getJSONArray("Cameras");
                                     for (int j = 0; j < finalArr.length(); j++) {
 
                                         String label = finalArr.getJSONObject(j).getString("Description");
                                         String img = finalArr.getJSONObject(j).getString("ImageUrl");
                                         String type = finalArr.getJSONObject(j).getString("Type");
 
-
-
-
-                                        traffic.add(new trafficItems(label, img, type));
+                                        traffic.add(new trafficItems(label, img, type, lat, lan));
                                     }
-                                    adapter = new AdapterTraffic(RecyclerViewTrafficActivity.this, traffic);
 
-                                    recyclerView.setAdapter(adapter);
-                                    adapter.notifyDataSetChanged();
+
                                 }
-
+                                adapter.notifyDataSetChanged();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -107,13 +104,15 @@ public class RecyclerViewTrafficActivity extends AppCompatActivity{
 
 
                 }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                    }
-                });
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
         queue.add(request);
+
     }
+
 
     public boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);

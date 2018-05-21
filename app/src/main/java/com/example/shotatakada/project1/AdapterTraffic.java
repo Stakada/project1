@@ -44,7 +44,6 @@ public class AdapterTraffic extends RecyclerView.Adapter<AdapterTraffic.ViewHold
     public void onBindViewHolder(AdapterTraffic.ViewHolder holder, int position) {
         trafficItems currItem = arr.get(position);
         holder.mLabel.setText(currItem.getLabel());
-        //Picasso.with(context).load(currItem.getImage());
         Glide.with(context).load(currItem.getImage()).into(holder.mImage);
     }
 
