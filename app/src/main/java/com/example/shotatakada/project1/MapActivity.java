@@ -17,6 +17,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -36,10 +39,12 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,6 +105,15 @@ public class MapActivity extends FragmentActivity implements GoogleApiClient.Con
                                     }
 
 
+                                }
+
+                                for(int i = 0; i< traffic.size(); i++){
+                                    trafficItems currItem = traffic.get(i);
+
+                                    mMap.addMarker(new MarkerOptions()
+                                            .position( new LatLng(currItem.getLat(),currItem.getLan() ))
+                                            .title(currItem.getLabel())
+                                            .snippet(currItem.getImage()));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -196,6 +210,28 @@ public class MapActivity extends FragmentActivity implements GoogleApiClient.Con
     public void onMapReady(GoogleMap googleMap) {
         // store map object for use once location is available
         mMap = googleMap;
+
+        if(mMap != null){
+            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    return null;
+                }
+
+                @Override
+                public View getInfoContents(Marker marker) {
+
+                    View v = getLayoutInflater().inflate(R.layout.infowindow, null);
+                    ImageView img = v.findViewById(R.id.img);
+                    TextView text = v.findViewById(R.id.title);
+                    
+                    Picasso.with(MapActivity.this).load(marker.getSnippet()).fit().into(img);
+                    text.setText(marker.getTitle());
+                    return v;
+                }
+            });
+
+        }
         getDeviceLocation();
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -205,14 +241,6 @@ public class MapActivity extends FragmentActivity implements GoogleApiClient.Con
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
-        for(int i = 0; i< traffic.size(); i++){
-            trafficItems currItem = traffic.get(i);
-
-            mMap.addMarker(new MarkerOptions()
-                    .position( new LatLng(currItem.getLat(),currItem.getLan() ))
-            .title(currItem.getLabel()));
-        }
 
         mMap.addMarker(new MarkerOptions()
             .position( new LatLng(47.526783365445,-122.392755787503))
