@@ -17,6 +17,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,6 +46,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -51,6 +54,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
 
 
 public class MapActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -211,27 +215,7 @@ public class MapActivity extends FragmentActivity implements GoogleApiClient.Con
         // store map object for use once location is available
         mMap = googleMap;
 
-        if(mMap != null){
-            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                @Override
-                public View getInfoWindow(Marker marker) {
-                    return null;
-                }
 
-                @Override
-                public View getInfoContents(Marker marker) {
-
-                    View v = getLayoutInflater().inflate(R.layout.infowindow, null);
-                    ImageView img = v.findViewById(R.id.img);
-                    TextView text = v.findViewById(R.id.title);
-                    
-                    Picasso.with(MapActivity.this).load(marker.getSnippet()).fit().into(img);
-                    text.setText(marker.getTitle());
-                    return v;
-                }
-            });
-
-        }
         getDeviceLocation();
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -241,10 +225,85 @@ public class MapActivity extends FragmentActivity implements GoogleApiClient.Con
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        getCameraData();
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
 
-        mMap.addMarker(new MarkerOptions()
-            .position( new LatLng(47.526783365445,-122.392755787503))
-                .title("Test"));
+            @Override
+            public View getInfoContents(Marker marker) {
+                View v = getLayoutInflater().inflate(R.layout.infowindow, null);
+                ImageView img = v.findViewById(R.id.img);
+                TextView text = v.findViewById(R.id.title);
+
+                Picasso.with(MapActivity.this).load(marker.getSnippet()).fit().into(img);
+                text.setText(marker.getTitle());
+                //marker.showInfoWindow();
+                return v;
+            }
+        });
+    }
+
+    public void getCameraData(){
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray features = response.getJSONArray("Features");
+                            try {
+                                for (int i = 0; i < features.length(); i++) {
+                                    JSONObject obj = features.getJSONObject(i);
+
+                                    //Get coordinate
+                                    JSONArray coord = obj.getJSONArray("PointCoordinate");
+                                    Double lat = coord.optDouble(0);
+                                    Double lan = coord.optDouble(1);
+
+
+                                    //iterate through the Camera array
+                                    JSONArray finalArr = obj.getJSONArray("Cameras");
+                                    for (int j = 0; j < finalArr.length(); j++) {
+
+                                        String label = finalArr.getJSONObject(j).getString("Description");
+                                        String img = finalArr.getJSONObject(j).getString("ImageUrl");
+                                        String type = finalArr.getJSONObject(j).getString("Type");
+
+                                        traffic.add(new trafficItems(label, img, type, lat, lan));
+                                    }
+
+
+                                }
+
+                                for(int i = 0; i< traffic.size(); i++){
+                                    trafficItems currItem = traffic.get(i);
+
+                                    mMap.addMarker(new MarkerOptions()
+                                            .position( new LatLng(currItem.getLat(),currItem.getLan() ))
+                                            .title(currItem.getLabel())
+                                            .snippet(currItem.getImage())
+                                    );
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
 
     }
 
@@ -318,6 +377,33 @@ public class MapActivity extends FragmentActivity implements GoogleApiClient.Con
 
     }
 
+    public class MapInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
 
+        Context context;
+
+        public MapInfoWindowAdapter(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            View v = getLayoutInflater().inflate(R.layout.infowindow, null);
+            ImageView img = v.findViewById(R.id.img);
+            TextView text = v.findViewById(R.id.title);
+
+            Picasso.with(context).load(marker.getSnippet()).fit().into(img);
+            text.setText(marker.getTitle());
+            return v;
+
+        }
+
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            return null;
+        }
+
+
+    }
 }
